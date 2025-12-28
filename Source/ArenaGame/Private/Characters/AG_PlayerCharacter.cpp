@@ -30,7 +30,7 @@ AAG_PlayerCharacter::AAG_PlayerCharacter()
 	
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("CameraBoom"));
 	CameraBoom->SetupAttachment(GetRootComponent());
-	CameraBoom->TargetArmLength = 600.0f;
+	CameraBoom->TargetArmLength = 800.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
