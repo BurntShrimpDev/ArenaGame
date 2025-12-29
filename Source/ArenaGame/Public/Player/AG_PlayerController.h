@@ -10,6 +10,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class USplineComponent;
+class IAG_TargetInterface;
 
 /**
  * 
@@ -20,6 +21,7 @@ class ARENAGAME_API AAG_PlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	AAG_PlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -42,4 +44,10 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
+	
+	void CursorTrace();
+	
+	TScriptInterface<IAG_TargetInterface> LastActor;
+	TScriptInterface<IAG_TargetInterface> CurrentActor;
+	
 };

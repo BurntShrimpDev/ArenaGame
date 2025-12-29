@@ -3,11 +3,23 @@
 
 #include "ArenaGame/Public/Characters/AG_EnemyCharacter.h"
 
+#include "ArenaGame/ArenaGame.h"
 
-// Sets default values
+
 AAG_EnemyCharacter::AAG_EnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AAG_EnemyCharacter::HighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+}
+
+void AAG_EnemyCharacter::UnhighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(false);
 }
 
 
