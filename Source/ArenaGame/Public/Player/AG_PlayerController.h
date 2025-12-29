@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "AG_PlayerController.generated.h"
 
+struct FGameplayTag;
+class UAG_InputConfig;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -50,5 +52,12 @@ private:
 	
 	TScriptInterface<IAG_TargetInterface> LastActor;
 	TScriptInterface<IAG_TargetInterface> CurrentActor;
+	
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Arena|Input")
+	TObjectPtr<UAG_InputConfig> InputConfig;
 	
 };

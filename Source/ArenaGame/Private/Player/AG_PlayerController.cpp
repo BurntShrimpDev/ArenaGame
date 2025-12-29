@@ -3,10 +3,10 @@
 
 #include "ArenaGame/Public/Player/AG_PlayerController.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "ArenaGame/Public/Core/AG_Collision.h"
 #include "ArenaGame/Public/Interaction/AG_TargetInterface.h"
 #include "Components/SplineComponent.h"
+#include "Input/AG_InputComponent.h"
 
 AAG_PlayerController::AAG_PlayerController()
 {
@@ -55,6 +55,21 @@ void AAG_PlayerController::CursorTrace()
 	}
 }
 
+void AAG_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+}
+
+void AAG_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Blue, *InputTag.ToString());
+}
+
+void AAG_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Green, *InputTag.ToString());
+}
+
 void AAG_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -72,18 +87,19 @@ void AAG_PlayerController::SetupInputComponent()
 		InputSubsystem->AddMappingContext(Context, 0);
 	}
 
-	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
-	if (!IsValid(EnhancedInputComponent)) return;
+	UAG_InputComponent* AG_InputComponent = Cast<UAG_InputComponent>(InputComponent);
+	if (!IsValid(AG_InputComponent)) return;
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
-
+	
 	FInputModeGameAndUI InputModeData;
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputModeData.SetHideCursorDuringCapture(false);
 	SetInputMode(InputModeData);
 
-	EnhancedInputComponent->BindAction(KeyboardMoveAction, ETriggerEvent::Triggered, this, &ThisClass::KeyboardMove);
+	AG_InputComponent->BindAction(KeyboardMoveAction, ETriggerEvent::Triggered, this, &ThisClass::KeyboardMove);	
+	AG_InputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void AAG_PlayerController::KeyboardMove(const FInputActionValue& Value)
