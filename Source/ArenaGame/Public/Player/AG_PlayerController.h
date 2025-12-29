@@ -21,6 +21,7 @@ class ARENAGAME_API AAG_PlayerController : public APlayerController
 public:
 	AAG_PlayerController();
 protected:
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Arena|Input")

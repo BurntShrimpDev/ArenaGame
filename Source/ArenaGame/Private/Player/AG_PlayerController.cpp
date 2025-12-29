@@ -13,6 +13,11 @@ AAG_PlayerController::AAG_PlayerController()
 	Spline = CreateDefaultSubobject<USplineComponent>(FName("Spline"));
 }
 
+void AAG_PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AAG_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -26,6 +31,14 @@ void AAG_PlayerController::SetupInputComponent()
 
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
 	if (!IsValid(EnhancedInputComponent)) return;
+	
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+	
+	FInputModeGameAndUI InputModeData;
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputModeData.SetHideCursorDuringCapture(false);
+	SetInputMode(InputModeData);
 	
 	EnhancedInputComponent->BindAction(KeyboardMoveAction, ETriggerEvent::Triggered, this, &ThisClass::KeyboardMove);
 }
