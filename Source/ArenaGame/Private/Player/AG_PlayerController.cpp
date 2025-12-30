@@ -5,6 +5,8 @@
 
 #include "AG_GameplayTags.h"
 #include "EnhancedInputSubsystems.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "ArenaGame/Public/Core/AG_Collision.h"
 #include "ArenaGame/Public/Interaction/AG_TargetInterface.h"
 #include "Components/SplineComponent.h"
@@ -69,7 +71,34 @@ void AAG_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void AAG_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	//
+	if (!InputTag.MatchesTagExact(AGTags::InputTags::LMB))
+	{
+		return;
+	}
+	if (bTargeting)
+	{
+		return;
+	}
+	else
+	{
+		APawn* ControlledPawn = GetPawn();
+		if (FollowTime <= ShortPressThreshold && ControlledPawn)
+		{
+			
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(),CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				for (const FVector& PointLoc : NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLoc, ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(), PointLoc, 8.f, 8.f, FColor::Green, false, 5.f);
+				}
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+	}
 }
 
 void AAG_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -80,7 +109,7 @@ void AAG_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	}
 	if (bTargeting)
 	{
-		
+		return;
 	}
 	else
 	{
