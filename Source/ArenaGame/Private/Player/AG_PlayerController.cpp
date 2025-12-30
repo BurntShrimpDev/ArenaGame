@@ -2,6 +2,8 @@
 
 
 #include "ArenaGame/Public/Player/AG_PlayerController.h"
+
+#include "AG_GameplayTags.h"
 #include "EnhancedInputSubsystems.h"
 #include "ArenaGame/Public/Core/AG_Collision.h"
 #include "ArenaGame/Public/Interaction/AG_TargetInterface.h"
@@ -57,17 +59,45 @@ void AAG_PlayerController::CursorTrace()
 
 void AAG_PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+	if (InputTag.MatchesTagExact(AGTags::InputTags::LMB))
+	{
+		bTargeting = CurrentActor ? true : false;
+		bAutoRunning = false;
+	}
+	
 }
 
 void AAG_PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Blue, *InputTag.ToString());
+	//
 }
 
 void AAG_PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Green, *InputTag.ToString());
+	if (!InputTag.MatchesTagExact(AGTags::InputTags::LMB))
+	{
+		return;
+	}
+	if (bTargeting)
+	{
+		
+	}
+	else
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		
+		FHitResult Hit;
+		if (GetHitResultUnderCursor(AGCollision::MousePick, false, Hit))
+		{
+			CachedDestination = Hit.ImpactPoint;
+		}
+		
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
+		}
+	}
 }
 
 void AAG_PlayerController::BeginPlay()

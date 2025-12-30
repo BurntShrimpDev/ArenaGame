@@ -14,7 +14,7 @@ namespace AGTags
 		UE_DECLARE_GAMEPLAY_TAG_EXTERN(SetByCaller1);
 	}
 	
-	namespace InputTag
+	namespace InputTags
 	{
 		UE_DECLARE_GAMEPLAY_TAG_EXTERN(LMB);
 		UE_DECLARE_GAMEPLAY_TAG_EXTERN(RMB);

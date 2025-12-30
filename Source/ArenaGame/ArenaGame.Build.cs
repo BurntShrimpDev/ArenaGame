@@ -10,12 +10,12 @@ public class ArenaGame : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
-			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayAbilities"
+			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayAbilities", "GameplayTags",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			 "GameplayTags", "GameplayTasks"
+			 "GameplayTasks"
 		});
 
 		// Uncomment if you are using Slate UI
