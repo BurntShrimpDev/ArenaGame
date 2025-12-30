@@ -23,7 +23,7 @@ public:
 protected:
 
 	UPROPERTY()
-	TObjectPtr<UAG_AbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;

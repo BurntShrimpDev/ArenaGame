@@ -16,9 +16,10 @@ public:
 
 	AAG_EnemyCharacter();
 	
+	/** Begin Target Interface*/
 	virtual void HighlightActor() override;
 	virtual void UnhighlightActor() override;
-
+	/** End Target Interface*/
 
 protected:
 	

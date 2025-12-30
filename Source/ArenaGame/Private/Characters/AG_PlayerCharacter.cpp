@@ -3,10 +3,12 @@
 
 #include "ArenaGame/Public/Characters/AG_PlayerCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/AG_PlayerState.h"
 
 
 AAG_PlayerCharacter::AAG_PlayerCharacter()
@@ -36,4 +38,27 @@ AAG_PlayerCharacter::AAG_PlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+}
+
+void AAG_PlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	// Init Ability Actor info for the Server
+	InitAbilityActorInfo();
+}
+
+void AAG_PlayerCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	// Init Ability Actor info for the Client
+	InitAbilityActorInfo();
+}
+
+void AAG_PlayerCharacter::InitAbilityActorInfo()
+{
+	AAG_PlayerState* AGPlayerState = GetPlayerState<AAG_PlayerState>();
+	check(AGPlayerState);
+	AGPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AGPlayerState, this);
+	AbilitySystemComponent = AGPlayerState->GetAbilitySystemComponent();
+	AttributeSet = AGPlayerState->GetAttributeSet();
 }

@@ -17,6 +17,8 @@ class ARENAGAME_API AAG_PlayerCharacter : public AAG_BaseCharacter
 public:
 
 	AAG_PlayerCharacter();
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 	
 private:
 	
@@ -25,5 +27,7 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category="Camera")
 	TObjectPtr<UCameraComponent> FollowCamera;
+	
+	void InitAbilityActorInfo();
 	
 };
