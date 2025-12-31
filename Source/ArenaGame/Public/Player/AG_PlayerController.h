@@ -60,4 +60,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Arena|Input")
 	TObjectPtr<UAG_InputConfig> InputConfig;
 	
+	void AutoRun();
+	
 };
